@@ -1,0 +1,165 @@
+version: "3.1"
+
+rules:
+
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Inform capability anytime user inquires
+  steps:
+  - intent: capability_ask
+  - action: utter_capability
+
+- rule: Inform the Mess Menu anytime user inquires
+  steps:
+  - intent: menu_check
+  - action: action_menu_check
+
+- rule: Check the Session Id when user informs
+  steps:
+  - intent: inform_session_id
+  - action: action_session_id_check
+
+- rule: Activate Meal Change Form
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+
+- rule: Activate Meal Cancel Form
+  steps:
+  - intent: meal_cancel
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+
+- rule: Activate Meal Uncancel Form
+  steps:
+  - intent: meal_uncancel
+  - action: meal_uncancel_form
+  - active_loop: meal_uncancel_form
+
+- rule: Submit Meal Change Form
+  condition:
+  - active_loop: meal_change_form
+  steps:
+  - action: meal_change_form
+  - active_loop: null
+  - slot_was_set:
+      - requested_slot: null
+  - action: submit_meal_change
+
+- rule: Submit Meal Cancel Form
+  condition:
+    - active_loop: meal_cancel_form
+  steps:
+  - action: meal_cancel_form
+  - active_loop: null
+  - slot_was_set:
+      - requested_slot: null
+  - action: submit_meal_cancel
+
+
+- rule: Submit Meal Uncancel Form
+  condition:
+    - active_loop: meal_uncancel_form
+  steps:
+  - action: meal_uncancel_form
+  - active_loop: null
+  - slot_was_set:
+      - requested_slot: null
+  - action: submit_meal_uncancel
+
+- rule: Ask the user to rephrase in case of low NLU confidence
+  steps:
+  - intent: nlu_fallback
+  - action: utter_not_understood
+  - action: utter_rephrase
+
+
+- rule: Interruption in Meal Change Form in case of low NLU confidence
+  condition:
+    - active_loop: meal_change_form
+  steps:
+  - intent: nlu_fallback
+  - action: utter_not_understood
+  - action: meal_change_form
+  - active_loop: meal_change_form
+
+- rule: Interruption in Meal Change Form for menu check
+  condition:
+    - active_loop: meal_change_form
+  steps:
+  - intent: menu_check
+  - action: action_menu_check
+  - action: meal_change_form
+  - active_loop: meal_change_form
+
+- rule: Interruption in Meal Cancel Form for menu check
+  condition:
+    - active_loop: meal_cancel_form
+  steps:
+  - intent: menu_check
+  - action: action_menu_check
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+
+- rule: Interruption in Meal Cancel Form in case of low NLU confidence
+  condition:
+    - active_loop: meal_cancel_form
+  steps:
+  - intent: nlu_fallback
+  - action: utter_not_understood
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+
+- rule: Interruption in Meal Uncancel Form for menu check
+  condition:
+    - active_loop: meal_uncancel_form
+  steps:
+  - intent: menu_check
+  - action: action_menu_check
+  - action: meal_uncancel_form
+  - active_loop: meal_uncancel_form
+
+- rule: Interruption in Meal Change Form in case of low NLU confidence
+  condition:
+    - active_loop: meal_cancel_form
+  steps:
+  - intent: nlu_fallback
+  - action: utter_not_understood
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+
+- rule: Interruption in Meal Change Form for Session ID check
+  condition:
+    - active_loop: meal_change_form
+  steps:
+  - intent: inform_session_id
+  - action: action_session_id_check
+  - action: meal_change_form
+  - active_loop: meal_change_form
+
+- rule: Interruption in Meal Cancel Form for Session ID check
+  condition:
+    - active_loop: meal_cancel_form
+  steps:
+  - intent: inform_session_id
+  - action: action_session_id_check
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+
+- rule: Interruption in Meal Uncancel Form for Session ID check
+  condition:
+    - active_loop: meal_uncancel_form
+  steps:
+  - intent: inform_session_id
+  - action: action_session_id_check
+  - action: meal_uncancel_form
+  - active_loop: meal_uncancel_form

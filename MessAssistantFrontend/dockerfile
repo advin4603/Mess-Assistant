@@ -1,0 +1,11 @@
+FROM node
+
+WORKDIR /frontend
+
+COPY package.json yarn.lock /frontend/
+
+RUN yarn install --pure-lockfile
+
+COPY . /frontend
+
+ENTRYPOINT ["yarn"]

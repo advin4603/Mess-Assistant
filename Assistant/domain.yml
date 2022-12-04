@@ -1,0 +1,158 @@
+version: '3.1'
+intents:
+- affirm
+- bot_challenge
+- capability_ask
+- deny
+- goodbye
+- greet
+- inform
+- inform_session_id
+- meal_cancel
+- meal_uncancel
+- meal_change
+- menu_check
+- mood_great
+- mood_unhappy
+responses:
+  utter_greet:
+  - text: Hey! How are you?
+  utter_cheer_up:
+  - text: 'Here is something to cheer you up:'
+    image: https://i.imgur.com/nGF1K8f.jpg
+  utter_did_that_help:
+  - text: Did that help you?
+  utter_happy:
+  - text: Great, carry on!
+  utter_goodbye:
+  - text: Bye
+  utter_iamabot:
+  - text: I am the Mess Assistant bot.
+  utter_capability:
+  - text: I'm here to help you with messes in IIIT. Here's what I can do...
+    buttons:
+    - title: Check your meals and menus
+      payload: /menu_check
+    - title: Change your mess registration
+      payload: /meal_change
+    - title: Cancel your mess registration
+      payload: /meal_cancel
+    - title: Uncancel your mess registration
+      payload: /meal_uncancel
+  utter_ask_meal_change_form_time:
+  - text: For which date do you want to change your mess registration?
+  utter_ask_meal_change_form_meal_time:
+  - text: Which meal do you want to change?
+    buttons:
+    - title: Breakfast
+      payload: /inform{{"meal_time":"breakfast"}}
+    - title: Lunch
+      payload: /inform{{"meal_time":"lunch"}}
+    - title: Dinner
+      payload: /inform{{"meal_time":"dinner"}}
+    - title: All Meals
+      payload: /inform{{"meal_time":"all meals"}}
+  utter_ask_meal_change_form_mess:
+  - text: To which mess do you want to change?
+    buttons:
+    - title: Kadamb-Veg Mess
+      payload: /inform{{"mess":"kadamba veg mess"}}
+    - title: Kadamb-Non-Veg Mess
+      payload: /inform{{"mess":"kadamba non veg mess"}}
+    - title: Yuktahaar Mess
+      payload: /inform{{"mess":"yuktahar mess"}}
+    - title: North Mess
+      payload: /inform{{"mess":"north mess"}}
+    - title: South Mess
+      payload: /inform{{"mess":"south mess"}}
+  utter_ask_meal_cancel_form_time:
+  - text: For which date do you want to cancel your mess registration?
+  utter_ask_meal_cancel_form_meal_time:
+  - text: Which meal do you want to cancel?
+    buttons:
+    - title: Breakfast
+      payload: /inform{{"meal_time":"breakfast"}}
+    - title: Lunch
+      payload: /inform{{"meal_time":"lunch"}}
+    - title: Dinner
+      payload: /inform{{"meal_time":"dinner"}}
+    - title: All Meals
+      payload: /inform{{"meal_time":"all meals"}}
+  utter_ask_meal_uncancel_form_time:
+    - text: For which date do you want to uncancel your mess registration?
+  utter_ask_meal_uncancel_form_meal_time:
+    - text: Which meal do you want to uncancel?
+      buttons:
+        - title: Breakfast
+          payload: /inform{{"meal_time":"breakfast"}}
+        - title: Lunch
+          payload: /inform{{"meal_time":"lunch"}}
+        - title: Dinner
+          payload: /inform{{"meal_time":"dinner"}}
+        - title: All Meals
+          payload: /inform{{"meal_time":"all meals"}}
+  utter_not_understood:
+    - text: Sorry, I didn't understand that.
+  utter_rephrase:
+    - text: Could you please rephrase that?
+actions:
+- action_menu_check
+- action_session_id_check
+- submit_meal_cancel
+- submit_meal_uncancel
+- submit_meal_change
+- utter_goodbye
+- utter_greet
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+entities:
+- meal_time
+- mess
+- session_id
+- time
+slots:
+  session_id:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: session_id
+  time:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: time
+  meal_time:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: meal_time
+  mess:
+    type: text
+    influence_conversation: true
+    mappings:
+    - type: from_entity
+      entity: mess
+forms:
+  meal_change_form:
+    ignored_intents:
+    - menu_check
+    required_slots:
+    - time
+    - meal_time
+    - mess
+  meal_cancel_form:
+    ignored_intents:
+    - menu_check
+    required_slots:
+    - time
+    - meal_time
+  meal_uncancel_form:
+    ignored_intents:
+      - menu_check
+    required_slots:
+      - time
+      - meal_time

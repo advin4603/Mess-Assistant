@@ -1,0 +1,13 @@
+FROM python:3.8
+
+WORKDIR /MessSessionIDGet
+
+COPY ./requirements.txt /MessSessionIDGet/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /MessSessionIDGet/requirements.txt
+
+RUN pip install lxml
+
+COPY ./main.py /MessSessionIDGet/
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8002"]

@@ -1,0 +1,734 @@
+version: "3.1"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+
+- story: sad path 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+
+- story: sad path 2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: deny
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+  - action: action_menu_check
+  - intent: menu_check
+    entities:
+    - mess: kadam
+  - action: action_menu_check
+  - intent: menu_check
+    entities:
+    - mess: south
+    - date: tomorrow
+    - date: breakfast
+  - action: action_menu_check
+
+- story: interactive_story_1
+  steps:
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+  - action: action_menu_check
+  - intent: menu_check
+    entities:
+    - mess: south mess
+    - date: day after tomorrow
+    - time: lunch
+  - action: action_menu_check
+  - intent: menu_check
+    entities:
+    - mess: yuktahar
+  - action: action_menu_check
+
+- story: interactive_story_1
+  steps:
+  - intent: menu_check
+    entities:
+    - date: saturday
+    - mess: yuktahar mess
+    - date: breakfast
+  - action: action_menu_check
+  - intent: menu_check
+    entities:
+    - date: sunday
+    - mess: north mess
+    - time: lunch
+  - action: action_menu_check
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: breakfast
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: kadamba veg mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+  - intent: greet
+  - action: utter_greet
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: inform
+    entities:
+    - meal_time: dinner
+    - mess: kadamba veg mess
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - slot_was_set:
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - slot_was_set:
+    - meal_time: dinner
+  - slot_was_set:
+    - mess: kadamba veg mess
+
+- story: interactive_story_2
+  steps:
+  - intent: menu_check
+    entities:
+    - meal_time: dinner
+    - mess: kadamba veg mess
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - action: action_menu_check
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+    - meal_time: breakfast
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: meal_time
+  - intent: menu_check
+    entities:
+    - mess: north mess
+    - meal_time: dinner
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: breakfast
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: yuktahar mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - intent: menu_check
+    entities:
+    - mess: yuktahar mess
+    - meal_time: dinner
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: breakfast
+  - slot_was_set:
+    - requested_slot: mess
+  - intent: menu_check
+    entities:
+    - mess: south mess
+    - meal_time: breakfast
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: kadamba veg mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: menu_check
+    entities:
+    - meal_time: dinner
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: lunch
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: north mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+
+- story: interactive_story_1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: meal_change
+    entities:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: breakfast
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: kadamba veg mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_cancel
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: breakfast
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_cancel
+
+- story: interactive_story
+  steps:
+  - intent: meal_cancel
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: menu_check
+    entities:
+    - meal_time: dinner
+    - mess: kadamba veg mess
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_cancel_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: menu_check
+    entities:
+    - mess: yuktahar mess
+    - time: '2022-10-16T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_cancel_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-16T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - intent: menu_check
+    entities:
+    - mess: north mess
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_cancel_form
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: dinner
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_cancel
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - slot_was_set:
+    - time: '2022-10-14T00:00:00.000-07:00'
+  - slot_was_set:
+    - mess: kadamba veg mess
+  - action: action_menu_check
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: menu_check
+    entities:
+    - mess: kadamba veg mess
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: menu_check
+    entities:
+    - mess: yuktahar mess
+    - time: '2022-10-18T00:00:00.000-07:00'
+  - action: action_menu_check
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-10-15T00:00:00.000-07:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: breakfast
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: kadamba veg mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+
+- story: interactive_story_1
+  steps:
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - slot_was_set:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - action: action_session_id_check
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - slot_was_set:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - action: action_session_id_check
+  - slot_was_set:
+    - session_id: null
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - slot_was_set:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - action: action_session_id_check
+  - slot_was_set:
+    - session_id: null
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - slot_was_set:
+    - session_id: _ST59369SyDWAShjQZad0DnZZJjjU1QHAS4login_
+  - action: action_session_id_check
+  - slot_was_set:
+    - session_id: null
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST62782U74E7HGQv3OQ2onjXdQ3Umb7W88login_
+  - action: action_session_id_check
+
+- story: interactive_story_1
+  steps:
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST62865Ii1Xhr9pIm0m4Tz1GUPsezdaVXUlogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLkNmeUZZVVl6eVJKN1pDaVh2T1hhd1EuSnhOdEY4ZDdUMElfQXByN08tNUVDamFGNHJCZkttRXhIYUR3clBQQW9ZLUJycmxNR1VvZmlDOGJ5a3Jtc3hUb0hBbVhvcnFmdktEdkZmRHc2dFY4STYtMDVVeTlHbEtXb09icW12VXBXdnJfbFNxaXJDM2pLM1M4TmNzcmtyM3JwR0RQdGxERVp0TGJhcDRMQUdWUTh6QktZRGtsc2FCOU9CVXI5akFrSHBjLkI4ZDR4VGRaTm42T3o5eXZFNG1fT1E.lus-4xI39-hOGA3XVe3apkxZ6VIdpgAqfvvICtYx3z06glPWM1e1aREH0tlyH4FzOfF5OvsmLSKGBujJ1YMwqg_
+  - slot_was_set:
+    - session_id: _ST62865Ii1Xhr9pIm0m4Tz1GUPsezdaVXUlogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLkNmeUZZVVl6eVJKN1pDaVh2T1hhd1EuSnhOdEY4ZDdUMElfQXByN08tNUVDamFGNHJCZkttRXhIYUR3clBQQW9ZLUJycmxNR1VvZmlDOGJ5a3Jtc3hUb0hBbVhvcnFmdktEdkZmRHc2dFY4STYtMDVVeTlHbEtXb09icW12VXBXdnJfbFNxaXJDM2pLM1M4TmNzcmtyM3JwR0RQdGxERVp0TGJhcDRMQUdWUTh6QktZRGtsc2FCOU9CVXI5akFrSHBjLkI4ZDR4VGRaTm42T3o5eXZFNG1fT1E.lus-4xI39-hOGA3XVe3apkxZ6VIdpgAqfvvICtYx3z06glPWM1e1aREH0tlyH4FzOfF5OvsmLSKGBujJ1YMwqg_
+  - action: action_session_id_check
+  - slot_was_set:
+    - session_id: null
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST62865Ii1Xhr9pIm0m4Tz1GUPsezdaVXUlogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLkNmeUZZVVl6eVJKN1pDaVh2T1hhd1EuSnhOdEY4ZDdUMElfQXByN08tNUVDamFGNHJCZkttRXhIYUR3clBQQW9ZLUJycmxNR1VvZmlDOGJ5a3Jtc3hUb0hBbVhvcnFmdktEdkZmRHc2dFY4STYtMDVVeTlHbEtXb09icW12VXBXdnJfbFNxaXJDM2pLM1M4TmNzcmtyM3JwR0RQdGxERVp0TGJhcDRMQUdWUTh6QktZRGtsc2FCOU9CVXI5akFrSHBjLkI4ZDR4VGRaTm42T3o5eXZFNG1fT1E.lus-4xI39-hOGA3XVe3apkxZ6VIdpgAqfvvICtYx3z06glPWM1e1aREH0tlyH4FzOfF5OvsmLSKGBujJ1YMwqg_
+  - slot_was_set:
+    - session_id: _ST62865Ii1Xhr9pIm0m4Tz1GUPsezdaVXUlogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLkNmeUZZVVl6eVJKN1pDaVh2T1hhd1EuSnhOdEY4ZDdUMElfQXByN08tNUVDamFGNHJCZkttRXhIYUR3clBQQW9ZLUJycmxNR1VvZmlDOGJ5a3Jtc3hUb0hBbVhvcnFmdktEdkZmRHc2dFY4STYtMDVVeTlHbEtXb09icW12VXBXdnJfbFNxaXJDM2pLM1M4TmNzcmtyM3JwR0RQdGxERVp0TGJhcDRMQUdWUTh6QktZRGtsc2FCOU9CVXI5akFrSHBjLkI4ZDR4VGRaTm42T3o5eXZFNG1fT1E.lus-4xI39-hOGA3XVe3apkxZ6VIdpgAqfvvICtYx3z06glPWM1e1aREH0tlyH4FzOfF5OvsmLSKGBujJ1YMwqg_
+  - action: action_session_id_check
+  - slot_was_set:
+    - session_id: null
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST62965ebySwRkCAQVBzB65qboiD3a8kuglogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLi1lSlNTRHJxNzhONy1qd0J6QkF1MncudzM0aWtwUExzSkV6YnFZRGVJR0ZKV1B5a0IwQWtYOTBSdWxRSVdrZWJwUEF4cGdtUERNbUc2MFAyQmVyWDJKNnpEUkxldklHRjZTX2ZITFIyYlU1QnAyOFd3VVBDem1rMmZaY29DeldTSEhtSDhYRmwzQTgwVHB2RlNJclUzeTQxTWM0S2hEbGZtOHhwbWEwczl1N094TEJzVl8zWHVKTnh2THlvZkFNbjM4LmtrVkhYRzl5MVFiMkh0V0hJVVpmb1E.Aeh289UES8vfebtcD-9ZAMdUc_XNsSZjrvgSbDE-cON2wBbdMbVu44hyst_D2XYHhCSF3tsNw26xHlztUORT-Q_
+  - slot_was_set:
+    - session_id: _ST62965ebySwRkCAQVBzB65qboiD3a8kuglogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLi1lSlNTRHJxNzhONy1qd0J6QkF1MncudzM0aWtwUExzSkV6YnFZRGVJR0ZKV1B5a0IwQWtYOTBSdWxRSVdrZWJwUEF4cGdtUERNbUc2MFAyQmVyWDJKNnpEUkxldklHRjZTX2ZITFIyYlU1QnAyOFd3VVBDem1rMmZaY29DeldTSEhtSDhYRmwzQTgwVHB2RlNJclUzeTQxTWM0S2hEbGZtOHhwbWEwczl1N094TEJzVl8zWHVKTnh2THlvZkFNbjM4LmtrVkhYRzl5MVFiMkh0V0hJVVpmb1E.Aeh289UES8vfebtcD-9ZAMdUc_XNsSZjrvgSbDE-cON2wBbdMbVu44hyst_D2XYHhCSF3tsNw26xHlztUORT-Q_
+  - action: action_session_id_check
+  - slot_was_set:
+    - session_id: null
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST62989RiMj489mhJKYOeY9y5CNRc9glogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLnpiYmVaakpuTTVNNVRXYkZ1ZGd5TkEuLXFsaFRnclo2TXpLSHlQLTdSOWVVVXRuUDA5d1luMjJwZ2wzWDNVR3BONGZheUxDd0ZuTXdDcFlSNlN0QkVETjJ6QjRQNTVYNUJDZXctbmhFMDNBeWk4UTBvdnlDOVp5bEhnb2h1dTlUcXd4bmFvMzJLRTUwaktROE9MVlF0dC1hcndZU1RnMlR5czNNMkdEZjUtY2RrV1NkLU9TcGJGVmlERG5YWmRKRHB3LlRHQU1lY0ViQjlNUFhydjFTcExpX0E.1vYsulNrlRb2UwIgV-HpN8pC6S1XIYIB3iYpZEWYUVRvfsRxyY8OrHaB0rA5nzYYvxGSQo_evu3XDf7RGckAdQ_
+  - action: action_session_id_check
+
+- story: interactive_story_1
+  steps:
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST62989RiMj489mhJKYOeY9y5CNRc9glogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLnpiYmVaakpuTTVNNVRXYkZ1ZGd5TkEuLXFsaFRnclo2TXpLSHlQLTdSOWVVVXRuUDA5d1luMjJwZ2wzWDNVR3BONGZheUxDd0ZuTXdDcFlSNlN0QkVETjJ6QjRQNTVYNUJDZXctbmhFMDNBeWk4UTBvdnlDOVp5bEhnb2h1dTlUcXd4bmFvMzJLRTUwaktROE9MVlF0dC1hcndZU1RnMlR5czNNMkdEZjUtY2RrV1NkLU9TcGJGVmlERG5YWmRKRHB3LlRHQU1lY0ViQjlNUFhydjFTcExpX0E.1vYsulNrlRb2UwIgV-HpN8pC6S1XIYIB3iYpZEWYUVRvfsRxyY8OrHaB0rA5nzYYvxGSQo_evu3XDf7RGckAdQ_
+  - slot_was_set:
+    - session_id: _ST62989RiMj489mhJKYOeY9y5CNRc9glogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLnpiYmVaakpuTTVNNVRXYkZ1ZGd5TkEuLXFsaFRnclo2TXpLSHlQLTdSOWVVVXRuUDA5d1luMjJwZ2wzWDNVR3BONGZheUxDd0ZuTXdDcFlSNlN0QkVETjJ6QjRQNTVYNUJDZXctbmhFMDNBeWk4UTBvdnlDOVp5bEhnb2h1dTlUcXd4bmFvMzJLRTUwaktROE9MVlF0dC1hcndZU1RnMlR5czNNMkdEZjUtY2RrV1NkLU9TcGJGVmlERG5YWmRKRHB3LlRHQU1lY0ViQjlNUFhydjFTcExpX0E.1vYsulNrlRb2UwIgV-HpN8pC6S1XIYIB3iYpZEWYUVRvfsRxyY8OrHaB0rA5nzYYvxGSQo_evu3XDf7RGckAdQ_
+  - action: action_session_id_check
+
+- story: interactive_story_1
+  steps:
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST63091vqswGcDwZv3rHynTOZioHQmxVewlogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLkdSZVM2Mk1UVjdsRHc3RVl3djJ5YUEuNjBUVGIwV1h1b0FiWGVJZVBoZjZJX2Etc3hnbk0yTUE5djl5UTUzVVo4YVNGd2hWYkZPYkhkbUktak1qMVg1dGthRkJ5eEpzMFlMS3dkaEZpNWpGOU1ZVUxubkhyZVRET2FGOGsyRmM1S0dpTUlXZFlPOUgwMmpmdTczS0dxeUtPNzloTGtqZkhScEplOVItV1FiSzU1SGZnN0VXWHdCeWxacE9zSW9hajhzLm9FRnFuWWlDU3lLR2hYLWx6UlhCcmc.xZw_L5qOoFxayCS5fbmbnkGMjZLAJ3ggEUb_8odbPReA7MhsIB5pRZQYxuxhWkKygZELZ3_NwBFueUhqwGwu6A_
+  - action: action_session_id_check
+
+- story: interactive_story_1
+  steps:
+  - intent: inform_session_id
+    entities:
+    - session_id: _ST63122AXjIdW2oLRJeV6y4PWqrSiZZFglogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLnJ0azlZVEs2LUZLY25oWHM5VDV3SEEueGFKUXRZQUFYWktDV2M4am8zX0tFQzBXLTNhTHR1RjNMY0ZXRXVmdW42Z2dlT2pzdDJxYXUwR0lnZ3U1T05yWTBXcDdtelZsX3ZRZ1JKbXhYR1JtaUltQkgwNzZmaWxLaENtd1QwV29hdHBpLTFGM0JuTDdPV3MwRlEtWUNBdGh6eFhSSjJyQ1dwOXJVNTJSVEtTUTcxeGNkaks3enNwNUdraUlCMkk4S05VLnNfMWJDeVB4TjdZNHE2VlAwd0REaHc.jMIbb9pnm5qc3mu8fPMT18_6-aO5OKkzgq9RDRLgIvepnjljG2py6aK-epbypv5JgWAj43md0S20cX2O6zWDDQ_
+    - time: '2022-10-31T04:00:00.000-07:00'
+  - slot_was_set:
+    - session_id: _ST63122AXjIdW2oLRJeV6y4PWqrSiZZFglogin|eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.ZXlKNmFYQWlPaUpFUlVZaUxDSmhiR2NpT2lKa2FYSWlMQ0psYm1NaU9pSkJNVEk0UTBKRExVaFRNalUySWl3aVkzUjVJam9pU2xkVUlpd2lkSGx3SWpvaVNsZFVJbjAuLnJ0azlZVEs2LUZLY25oWHM5VDV3SEEueGFKUXRZQUFYWktDV2M4am8zX0tFQzBXLTNhTHR1RjNMY0ZXRXVmdW42Z2dlT2pzdDJxYXUwR0lnZ3U1T05yWTBXcDdtelZsX3ZRZ1JKbXhYR1JtaUltQkgwNzZmaWxLaENtd1QwV29hdHBpLTFGM0JuTDdPV3MwRlEtWUNBdGh6eFhSSjJyQ1dwOXJVNTJSVEtTUTcxeGNkaks3enNwNUdraUlCMkk4S05VLnNfMWJDeVB4TjdZNHE2VlAwd0REaHc.jMIbb9pnm5qc3mu8fPMT18_6-aO5OKkzgq9RDRLgIvepnjljG2py6aK-epbypv5JgWAj43md0S20cX2O6zWDDQ_
+  - slot_was_set:
+    - time: '2022-10-31T04:00:00.000-07:00'
+  - action: action_session_id_check
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_cancel
+    entities:
+    - meal_time: all my meals
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+  - slot_was_set:
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: all my meals
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_cancel
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - intent: meal_change
+    entities:
+    - meal_time: all meals
+    - time: '2022-11-10T00:00:00.000-08:00'
+  - slot_was_set:
+    - time: '2022-11-10T00:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: all meals
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - time: '2022-11-10T00:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: all meals
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: north mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_cancel
+    entities:
+    - meal_time: all my meals
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+  - slot_was_set:
+    - meal_time: all my meals
+  - slot_was_set:
+    - requested_slot: time
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - slot_was_set:
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: all meals
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: north mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+  - intent: meal_cancel
+    entities:
+    - meal_time: all meals
+    - time: '2022-12-23T00:00:00.000-08:00'
+  - action: meal_cancel_form
+  - active_loop: meal_cancel_form
+  - slot_was_set:
+    - time: '2022-12-23T00:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: all meals
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_cancel
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - intent: menu_check
+    entities:
+    - meal_time: all meals
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - slot_was_set:
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: all meals
+  - action: action_menu_check
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+  - intent: menu_check
+    entities:
+    - meal_time: lunch
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: lunch
+  - action: action_menu_check
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+  - intent: menu_check
+    entities:
+    - meal_time: lunch
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: lunch
+  - action: action_menu_check
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+  - intent: menu_check
+    entities:
+    - meal_time: lunch
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: lunch
+  - action: action_menu_check
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+  - intent: menu_check
+    entities:
+    - meal_time: lunch
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: lunch
+  - action: action_menu_check
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+  - intent: menu_check
+    entities:
+    - meal_time: lunch
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - time:
+        to: '2022-11-09T14:00:00.000-08:00'
+        from: '2022-11-09T12:00:00.000-08:00'
+  - slot_was_set:
+    - meal_time: lunch
+  - action: action_menu_check
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null
+
+- story: interactive_story_1
+  steps:
+  - intent: meal_change
+  - action: meal_change_form
+  - active_loop: meal_change_form
+  - slot_was_set:
+    - requested_slot: time
+  - intent: inform
+    entities:
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - slot_was_set:
+    - time: '2022-11-09T00:00:00.000-08:00'
+  - action: meal_change_form
+  - slot_was_set:
+    - requested_slot: meal_time
+  - slot_was_set:
+    - meal_time: all meals
+  - slot_was_set:
+    - requested_slot: mess
+  - slot_was_set:
+    - mess: north mess
+  - slot_was_set:
+    - requested_slot: null
+  - active_loop: null
+  - action: submit_meal_change
+  - slot_was_set:
+    - time: null
+  - slot_was_set:
+    - meal_time: null
+  - slot_was_set:
+    - mess: null

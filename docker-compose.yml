@@ -1,0 +1,27 @@
+version: "3.0"
+services:
+  rasa:
+    build:
+      context: Assistant
+      dockerfile: assistant.dockerfile
+    ports:
+      - "5005:5005"
+    command: run --cors "*"
+  actions:
+    build:
+      context: Assistant
+      dockerfile: actions.dockerfile
+    command: run actions
+    expose: ["5055"]
+  session-id-backend:
+    build: ./MessSessionIDGet
+    ports:
+      - "8002:8002"
+  duckling:
+    image: rasa/duckling:latest
+    expose: ["8000"]
+  frontend:
+    build: ./MessAssistantFrontend
+    ports:
+      - "5173:5173"
+    command: run dev --host 0.0.0.0
