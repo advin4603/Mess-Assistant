@@ -20,6 +20,8 @@ import requests
 
 MESS_URL = "https://mess.iiit.ac.in/mess/web/student_home.php"
 MESS_VIEW_URL = "https://mess.iiit.ac.in/mess/web/student_view_registration.php"
+MESS_CHANGE_URL = "https://mess.iiit.ac.in/mess/web/student_change_mess_process.php"
+MESS_CHANGE_SUCCESS_URL = "https://mess.iiit.ac.in/mess/web/student_change_mess.php?success=1"
 
 
 class ActionSessionIdCheck(Action):
@@ -43,6 +45,11 @@ class ActionSessionIdCheck(Action):
         return [SlotSet("session_id", None)]
 
 
+error_mapper = {
+    'Iudsfnvalid dateChanging mess registration is permitted two days in advance only': "Changing mess registration is permitted two days in advance only"
+}
+
+
 class ActionSubmitMealChange(Action):
     def name(self) -> Text:
         return "submit_meal_change"
@@ -50,11 +57,64 @@ class ActionSubmitMealChange(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        dispatcher.utter_message("Ok I am changing your meal")
-        messes = tracker.get_slot("mess")
-        dates = tracker.get_slot("time")
+        mess = tracker.get_slot("mess")
         times = tracker.get_slot("meal_time")
-        print("", messes, dates, times, sep="\n\t")
+        dates = tracker.get_slot("time")
+
+        payload = {"mess_name": str(mess_num_transform[mess]), "Normal": "1"}
+
+        ssid = tracker.get_slot('session_id')
+        if ssid is None:
+            dispatcher.utter_message("You are not authenticated, so I can't change your mess")
+            return [SlotSet("time", None), SlotSet("meal_time", None), SlotSet("mess", None)]
+
+        if times == "all meals":
+            msg = "I have changed all your meals "
+            payload["breakfast[]"] = "1"
+            payload["lunch[]"] = "1"
+            payload["dinner[]"] = "1"
+        else:
+            msg = f"I have changed your {times} "
+            payload[times + "[]"] = "1"
+
+        if type(dates) == dict and "from" in dates and "to" in dates:
+            startdate = datetime.fromisoformat(dates["from"])
+            enddate = datetime.fromisoformat(dates["to"])
+            enddate = datetime(enddate.year, enddate.month, enddate.day - 1)
+            msg += f"from {startdate.strftime('%d-%b')} to {enddate.strftime('%d-%b')} "
+        elif type(dates) == str:
+            startdate = enddate = datetime.fromisoformat(dates)
+            msg += f"on {startdate.strftime('%d-%b')} "
+        else:
+            startdate = enddate = datetime.now()
+
+        msg += f"to {mess_name_inv_transform[mess]}."
+        payload["startdate"] = startdate.strftime("%d-%b-%Y").upper()
+        payload["enddate"] = enddate.strftime("%d-%b-%Y").upper()
+
+        # dispatcher.utter_message(str(payload))
+        session_id, tgc = ssid.strip("_").split("|")
+        result = requests.post(MESS_CHANGE_URL, data=payload,
+                               cookies={"PHPSESSID": session_id, "TGC": tgc})
+        result_soup = BeautifulSoup(result.content)
+        # dispatcher.utter_message(str(result.content))
+        # dispatcher.utter_message(result.url)
+
+        title = str(result_soup.select_one("title").contents[0])
+        # dispatcher.utter_message(title)
+        if title.strip() != "Student Change Mess":
+            dispatcher.utter_message("Your session has expired. Please Log In and try again.")
+            dispatcher.utter_message(json_message={"data": {"verified": False}})
+            return [SlotSet("time", None), SlotSet("meal_time", None), SlotSet("mess", None),
+                    SlotSet("session_id", None)]
+
+        if result.url == MESS_CHANGE_SUCCESS_URL:
+            dispatcher.utter_message(msg)
+        else:
+            err = result_soup.select("#content")[0].select("font")[1].text
+
+            dispatcher.utter_message(f"I could not change your mess registration:\n{error_mapper[err]}")
+
         return [SlotSet("time", None), SlotSet("meal_time", None), SlotSet("mess", None)]
 
 
@@ -224,6 +284,16 @@ mess_name_transform = {
     "South": "south mess",
     "Yuktahaar": "yuktahar mess",
     "Kadamb Non-Veg": "kadamba non veg mess"
+}
+
+mess_name_inv_transform = {v: k for k, v in mess_name_transform.items()}
+
+mess_num_transform = {
+    "south mess": 1,
+    "north mess": 2,
+    "yuktahar mess": 3,
+    "kadamba veg mess": 4,
+    "kadamba non veg mess": 6
 }
 
 
