@@ -103,6 +103,9 @@ actions:
 - submit_meal_change
 - utter_goodbye
 - utter_greet
+- validate_meal_cancel_form
+- validate_meal_uncancel_form
+- validate_meal_change_form
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

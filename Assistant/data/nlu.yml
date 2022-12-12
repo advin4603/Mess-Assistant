@@ -267,6 +267,19 @@ nlu:
     - from day after tomorrow till 27 February
     - day after tomorrow
     - on 27th October 2022
+    - 19 jan
+    - 15 feb
+    - 20 mar
+    - 6 april
+    - 15 jul
+    - 9 june
+    - 10 jun
+    - 25 july
+    - 9 aug
+    - 25 sep
+    - 9 oct
+    - 18 nov
+    - 19 dec
     - [lunch](meal_time)
     - [kadam]{"entity": "mess", "value": "kadamba veg mess"}
     - [yuktahar]{"entity": "mess", "value": "yuktahar mess"}

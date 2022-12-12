@@ -7,6 +7,7 @@
 
 from typing import Any, Text, Dict, List
 from datetime import datetime
+from dateutil.tz import gettz
 import calendar
 from rasa_sdk import Action, Tracker
 from rasa_sdk.events import SlotSet
@@ -32,12 +33,11 @@ class ActionSessionIdCheck(Action):
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         session_id, tgc = tracker.get_slot('session_id').strip("_").split("|")
-        print(session_id)
-        print(tgc)
+
         result = requests.get(MESS_URL, cookies={"PHPSESSID": session_id, "TGC": tgc})
         result_soup = BeautifulSoup(result.content)
         title = result_soup.select_one("title").contents
-        print(title)
+
         if title and title[0] == "Student Home":
             dispatcher.utter_message(json_message={"data": {"verified": True}})
             return []
@@ -86,7 +86,7 @@ class ActionSubmitMealChange(Action):
             startdate = enddate = datetime.fromisoformat(dates)
             msg += f"on {startdate.strftime('%d-%b')} "
         else:
-            startdate = enddate = datetime.now()
+            startdate = enddate = datetime.now(gettz("Asia/Kolkata"))
 
         msg += f"to {mess_name_inv_transform[mess]}."
         payload["startdate"] = startdate.strftime("%d-%b-%Y").upper()
@@ -128,7 +128,7 @@ class ActionSubmitMealCancel(Action):
         dispatcher.utter_message("Ok I am cancelling your meal")
         dates = tracker.get_slot("time")
         times = tracker.get_slot("meal_time")
-        print("", dates, times, sep="\n\t")
+
         return [SlotSet("time", None), SlotSet("meal_time", None)]
 
 
@@ -142,7 +142,7 @@ class ActionSubmitMealUncancel(Action):
         dispatcher.utter_message("Ok I am uncancelling your meal")
         dates = tracker.get_slot("time")
         times = tracker.get_slot("meal_time")
-        print("", dates, times, sep="\n\t")
+
         return [SlotSet("time", None), SlotSet("meal_time", None)]
 
 
@@ -169,16 +169,17 @@ class ValidateMealCancelForm(FormValidationAction):
             tracker: Tracker,
             domain: DomainDict,
     ) -> Dict[Text, Any]:
+
         if type(slot_value) == str:
             time_obj = datetime.fromisoformat(slot_value)
-            delta = time_obj - datetime.now()
+            delta = time_obj - datetime.now(gettz("Asia/Kolkata"))
             if delta.days < 2:
                 dispatcher.utter_message("You can only cancel your mess from atleast two days in advance.")
                 return {"time": None}
             return {"time": slot_value}
         if type(slot_value) == dict and "from" in slot_value and "to" in slot_value:
             time_obj = datetime.fromisoformat(slot_value)
-            delta = time_obj - datetime.now()
+            delta = time_obj - datetime.now(gettz("Asia/Kolkata"))
             if delta.days < 2:
                 dispatcher.utter_message("You can only cancel your mess from atleast two days in advance.")
                 return {"time": None}
@@ -212,14 +213,14 @@ class ValidateMealUncancelForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         if type(slot_value) == str:
             time_obj = datetime.fromisoformat(slot_value)
-            delta = time_obj - datetime.now()
+            delta = time_obj - datetime.now(gettz("Asia/Kolkata"))
             if delta.days < 2:
                 dispatcher.utter_message("You can only uncancel your mess from atleast two days in advance.")
                 return {"time": None}
             return {"time": slot_value}
         if type(slot_value) == dict and "from" in slot_value and "to" in slot_value:
             time_obj = datetime.fromisoformat(slot_value)
-            delta = time_obj - datetime.now()
+            delta = time_obj - datetime.now(gettz("Asia/Kolkata"))
             if delta.days < 2:
                 dispatcher.utter_message("You can only uncancel your mess from atleast two days in advance.")
                 return {"time": None}
@@ -253,14 +254,14 @@ class ValidateMealChangeForm(FormValidationAction):
     ) -> Dict[Text, Any]:
         if type(slot_value) == str:
             time_obj = datetime.fromisoformat(slot_value)
-            delta = time_obj - datetime.now()
+            delta = time_obj - datetime.now(gettz("Asia/Kolkata"))
             if delta.days < 2:
                 dispatcher.utter_message("You can only change your mess from atleast two days in advance.")
                 return {"time": None}
             return {"time": slot_value}
         if type(slot_value) == dict and "from" in slot_value and "to" in slot_value:
             time_obj = datetime.fromisoformat(slot_value)
-            delta = time_obj - datetime.now()
+            delta = time_obj - datetime.now(gettz("Asia/Kolkata"))
             if delta.days < 2:
                 dispatcher.utter_message("You can only change your mess from atleast two days in advance.")
                 return {"time": None}
@@ -273,7 +274,7 @@ class ValidateMealChangeForm(FormValidationAction):
                       tracker: Tracker,
                       domain: DomainDict,
                       ) -> Dict[Text, Any]:
-        if slot_value not in mess_name_transform.values():
+        if slot_value not in mess_name_inv_transform:
             dispatcher.utter_message(text=f"{slot_value} is not a valid mess")
             return {"mess": None}
 
@@ -309,7 +310,7 @@ class ActionMenuCheck(Action):
         messes = list(tracker.get_latest_entity_values("mess"))
         dates = list(tracker.get_latest_entity_values("time"))
         times = list(tracker.get_latest_entity_values("meal_time"))
-        print(dates)
+
         if dates:
             if type(dates[0]) == str:
                 date = datetime.fromisoformat(dates[0])
@@ -317,13 +318,13 @@ class ActionMenuCheck(Action):
                 # ignore type mismatch
                 date = datetime.fromisoformat(dates[0]["to"])
         else:
-            date = datetime.now()
+            date = datetime.now(gettz("Asia/Kolkata"))
 
         if times:
             time = times[0]
         else:
             time = "all meals"
-        print(time)
+
         if time == "all meals":
             mess = "north mess", "north mess", "north mess"
         else:
@@ -389,7 +390,6 @@ class ActionMenuCheck(Action):
             else:
                 dispatcher.utter_message(text=f"{mess} is serving the following for {date} {time}:\n{meal.strip()}")
 
-        print(mess)
         return [SlotSet("time", None), SlotSet("meal_time", None), SlotSet("mess", None)]
 
 # TODO: Spell Checker, Form Cancel, Form Shift, Handle Form inform unhappy paths
