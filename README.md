@@ -8,7 +8,7 @@ Make sure you have installed all of the following prerequisites on your developm
 * Docker - [Get Docker](https://www.docker.com/)
 
 ## Running the Dialogue System Locally
-- Make sure you're connected to the IIIT intranet either using the (vpn)[https://vpn.iiit.ac.in/] or by connecting to the IIIT LAN.
+- Make sure you're connected to the IIIT intranet either using the [vpn](https://vpn.iiit.ac.in/) or by connecting to the IIIT LAN.
 - Launch the required docker containers using the following command.
 ```bash
 docker compose up
